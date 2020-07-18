@@ -1,0 +1,22 @@
+/*
+ * This file is from the sm-tf2c github.
+ * Please make sure that auto gamedata updating is disabled, otherwise this file may be overwritten.
+ *
+ * For more information, see https://github.com/AngelDTF/sm-tf2c
+ */
+  
+"Games"
+{
+	"tf2classic"
+	{
+		"Offsets"
+		{
+			"ForceRespawn"
+			{
+				"windows"	"22"
+				"linux"		"23"
+				"mac"		"23"
+			}
+		}
+	}
+}
