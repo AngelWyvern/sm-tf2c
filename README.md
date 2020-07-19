@@ -5,8 +5,7 @@ Here is a repository that includes some of the modern solutions to Sourcemod iss
 The Beta branch is still being actively developed and not all plugins may not be supported yet. If it exists, please switch over to the release branch for more stable compatibility.
 
 # Installation
-For easier use of Sourcemod on TF2Classic, download Sourcemod and Metamod from the official website, then replace the sourcemod files with the files in this repository.<br />
-It is recommended that you do the above before modifying the core gamedata/config files of Sourcemod.
+For easier use of Sourcemod on TF2Classic, download Sourcemod and Metamod from the official website, then replace the sourcemod files with the files in this repository. This should ensure proper functionality of Sourcemod.
 
 # Usage
 With this installed, it will fix problems such as SDKTools/SDKHooks refusing to work, fix up menus, etc.. You can also code and execute plugins for TF2 with the same enum and function names, and this is actually pretty easy to do. If you're coding a plugin for TF2Classic, read the below category on Including Functions. If you are instead looking to convert an existing TF2 plugin, then read the below category on Converting Existing TF2 Plugins.

@@ -1,6 +1,6 @@
 /*
  * This file is from the sm-tf2c github.
- * Please make sure that auto gamedata updating is disabled, otherwise this file may be overwritten.
+ * Please do not modify these files unless you absolutely know what you're doing!
  *
  * For more information, see https://github.com/AngelDTF/sm-tf2c
  */
@@ -13,9 +13,9 @@
 		{
 			"ForceRespawn"
 			{
-				"windows"	"22"
-				"linux"		"23"
-				"mac"		"23"
+				"windows"	"326"
+				"linux"		"327"
+				"mac"		"327"
 			}
 		}
 	}
