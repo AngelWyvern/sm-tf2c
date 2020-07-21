@@ -12,7 +12,7 @@ With this installed, it will fix problems such as SDKTools/SDKHooks refusing to 
 ## Including Functions
 Okay this is actually pretty simple. Instead of doing the ordinary such as `#include <tf2>` and `#include <tf2stocks>`, all you have to do is write `#include <tf2c>` and all the functions/enumerations from both of the other files should be there, and the tf2c include file contains more items in the enumerations for TF2Classic, such as `TFTeam_Green` or `TFClass_Civilian`, etc..
 ## Converting Existing TF2 Plugins
-This is just as easy as the section above actually, just delete the occurences of `#include <tf2>` and `#include <tf2stocks>` and replace them with `#include <tf2c>`. That's it really.
+In most cases, you shouldn't have to do anything and the plugin should work just fine on its own, even if it is including the old tf2 includes. If it isn't working, you could instead try deleting the occurences of `#include <tf2>` and `#include <tf2stocks>` and replacing them with `#include <tf2c>`.
 
 # Compatibility
 Part of the goal of sm-tf2c is to allow compatibility of TF2 plugins in TF2Classic. (You can read how to convert them above.) This section here will show you what you can do so far with the <tf2c> include:
