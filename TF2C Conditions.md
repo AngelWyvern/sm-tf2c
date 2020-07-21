@@ -1,8 +1,8 @@
 # TF2Classic Conditions
 The following are the conditions I have found to be currently working, although it needs further testing with more than just one player.<br />
 Format:<br />
-TFCond_(Name) - The name of the condition that is used to call them in Sourcepawn.<br />
-//(Number): (Description) - The number tells you what condition number you would have to use in addcond or removecond. The description informs you of what it does.
+> TFCond_(Name) - The name of the condition that is used to call them in Sourcepawn.<br />
+> //(Number): (Description) - The number tells you what condition number you would have to use in addcond or removecond. The description informs you of what it does.
 ###### TFCond
 TFCond_Slowed //0: Revving Minigun Sniper Rifle. Gives zoomed/revved pose<br />
 TFCond_Zoomed //1: Sniper Rifle zooming<br />
