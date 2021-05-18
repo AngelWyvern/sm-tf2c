@@ -40,7 +40,6 @@
 	"engine.ep2v.txt"
 	{
 		"engine"	"orangebox_valve"
-		"game"		"tf2classic"
 	}
 	
 	"engine.darkm.txt"
@@ -195,5 +194,10 @@
 	"game.reactivedrop.txt"
 	{
 		"game"		"reactivedrop"
+	}
+	
+	"game.tf2classic.txt"
+	{
+		"game"		"tf2classic"
 	}
 }
