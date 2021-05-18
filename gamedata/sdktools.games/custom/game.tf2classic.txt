@@ -12,35 +12,53 @@
 	{
 		"Offsets"
 		{
+			"GetTEName"
+			{
+				"windows"	"4"
+				"linux"		"4"
+				"mac"		"4"
+			}
+			"GetTENext"
+			{
+				"windows"	"8"
+				"linux"		"8"
+				"mac"		"8"
+			}
+			"TE_GetServerClass"
+			{
+				"windows"	"0"
+				"linux"		"0"
+				"mac"		"0"
+			}
 			"GiveNamedItem"
 			{
 				"windows"	"401"
-				"linux"		"405"
-				"mac"		"405"
+				"linux"		"402"
+				"mac"		"402"
 			}
 			"RemovePlayerItem"
-			{
-				"windows"	"273"
-				"linux"		"274"
-				"mac"		"274"
-			}
-			"Weapon_GetSlot"
 			{
 				"windows"	"271"
 				"linux"		"272"
 				"mac"		"272"
 			}
+			"Weapon_GetSlot"
+			{
+				"windows"	"269"
+				"linux"		"270"
+				"mac"		"270"
+			}
 			"Ignite"
 			{
-				"windows"	"212"
-				"linux"		"213"
-				"mac"		"213"
+				"windows"	"210"
+				"linux"		"211"
+				"mac"		"211"
 			}
 			"Extinguish"
 			{
-				"windows"	"216"
-				"linux"		"217"
-				"mac"		"217"
+				"windows"	"214"
+				"linux"		"215"
+				"mac"		"215"
 			}
 			"Teleport"
 			{
@@ -50,9 +68,9 @@
 			}
 			"CommitSuicide"
 			{
-				"windows"	"445"
-				"linux"		"445"
-				"mac"		"445"
+				"windows"	"442"
+				"linux"		"442"
+				"mac"		"442"
 			}
 			"GetVelocity"
 			{
@@ -80,9 +98,9 @@
 			}
 			"WeaponEquip"
 			{
-				"windows"	"264"
-				"linux"		"265"
-				"mac"		"265"
+				"windows"	"261"
+				"linux"		"262"
+				"mac"		"262"
 			}
 			"Activate"
 			{
@@ -92,36 +110,48 @@
 			}
 			"PlayerRunCmd"
 			{
-				"windows"	"422"
-				"linux"		"423"
-				"mac"		"423"
+				"windows"	"419"
+				"linux"		"420"
+				"mac"		"420"
 			}
 			"GiveAmmo"
 			{
-				"windows"	"255"
-				"linux"		"256"
-				"mac"		"256"
+				"windows"	"252"
+				"linux"		"253"
+				"mac"		"253"
+			}
+			"SetUserCvar"
+			{
+				"windows"	"18"
+				"linux"		"58"
+				"mac"		"58"
+			}
+			"SetClientName"
+			{
+				"windows"	"17"
+				"linux"		"57"
+				"mac"		"57"
+			}
+			"InfoChanged"
+			{
+				"windows"	"140"
+				"linux"		"140"
+				"mac"		"140"
 			}
 		}
-		
 		"Keys"
 		{
 			"GameRulesProxy"	"CTFGameRulesProxy"
 			"GameRulesDataTable" "tf_gamerules_data"
 		}
-	}
-	
-	/* CBaseEntityOutput::FireOutput */
-	"#default"
-	{
 		"Signatures"
 		{
 			"FireOutput"
 			{
 				"library"	"server"
-				"windows"	"\x55\x8B\xEC\x81\xEC\x24\x01\x00\x00\x53\x8B\xC1"
-				"linux"		"@_ZN17CBaseEntityOutput10FireOutputE9variant_tP11CBaseEntityS2_f"
-				"mac"		"@_ZN17CBaseEntityOutput10FireOutputE9variant_tP11CBaseEntityS2_f"
+				"windows"	"\x55\x8B\xEC\x81\xEC\x30\x01\x00\x00\xA1\x2A\x2A\x2A\x2A\x33\xC5\x89\x45\xFC\x53"
+				"linux"		"\x55\x89\xE5\x57\x56\x53\x81\xEC\xAC\x01\x00\x00\x8B\x55\x08\x65\xA1\x14\x00\x00\x00"
+				"mac"		"\x55\x89\xE5\x57\x56\x53\x81\xEC\xAC\x01\x00\x00\x8B\x55\x08\x65\xA1\x14\x00\x00\x00"
 			}
 		}
 	}
