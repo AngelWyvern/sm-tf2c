@@ -1,0 +1,166 @@
+/*
+ * This file is from the sm-tf2c github.
+ * Please do not modify these files unless you absolutely know what you're doing!
+ *
+ * For more information, see https://github.com/AngelDTF/sm-tf2c
+ */
+
+"Games"
+{
+	/* Team Fortress 2 Classic */
+	"tf2classic"
+	{
+		"Offsets"
+		{
+			"CanBeAutobalanced"
+			{
+				"windows" 	"459"
+				"linux"		"460"
+				"mac"		"460"
+			}
+			"EndTouch"
+			{
+				"windows" 	"102"
+				"linux"		"103"
+				"mac"		"103"
+			}
+			// "RagdollImpact"
+			"FireBullets"
+			{
+				"windows" 	"112"
+				"linux"		"113"
+				"mac"		"113"
+			}
+			"GetMaxHealth"
+			{
+				"linux"		"118"
+				"mac"		"118"				
+			}
+			"GroundEntChanged"
+			{
+				"windows" 	"177"
+				"linux"		"178"
+				"mac"		"178"
+			}
+			"OnTakeDamage"
+			{
+				"windows" 	"62"
+				"linux"		"63"
+				"mac"		"63"
+			}
+			"OnTakeDamage_Alive"
+			{
+				"windows" 	"273"
+				"linux"		"274"
+				"mac"		"274"
+			}
+			"PreThink"
+			{
+				"windows" 	"333"
+				"linux"		"334"
+				"mac"		"334"
+			}
+			"PostThink"
+			{
+				"windows" 	"334"
+				"linux"		"335"
+				"mac"		"335"
+			}
+			"Reload"
+			{
+				"windows" 	"281"
+				"linux"		"282"
+				"mac"		"282"
+			}
+			"SetTransmit"
+			{
+				"windows" 	"20"
+				"linux"		"21"
+				"mac"		"21"
+			}
+			"ShouldCollide"
+			{
+				"windows" 	"16"
+				"linux"		"17"
+				"mac"		"17"
+			}
+			"Spawn"
+			{
+				"windows" 	"22"
+				"linux"		"23"
+				"mac"		"23"
+			}
+			"StartTouch"
+			{
+				"windows" 	"100"
+				"linux"		"101"
+				"mac"		"101"
+			}
+			"Think"
+			{
+				"windows" 	"47"
+				"linux"		"48"
+				"mac"		"48"
+			}
+			"Touch"
+			{
+				"windows" 	"101"
+				"linux"		"102"
+				"mac"		"102"
+			}
+			"TraceAttack"
+			{
+				"windows" 	"60"
+				"linux"		"61"
+				"mac"		"61"
+			}
+			"Use"
+			{
+				"windows" 	"97"
+				"linux"		"98"
+				"mac"		"98"
+			}
+			"VPhysicsUpdate"
+			{
+				"windows" 	"158"
+				"linux"		"159"
+				"mac"		"159"
+			}
+			"Blocked"
+			{
+				"windows" 	"102"
+				"linux"		"103"
+				"mac"		"103"
+			}
+			"Weapon_CanSwitchTo"
+			{
+				"linux"		"267"
+				"mac"		"267"
+			}
+			"Weapon_CanUse"
+			{
+				"windows" 	"261"
+				"linux"		"262"
+				"mac"		"262"
+			}
+			"Weapon_Drop"
+			{
+				"windows" 	"264"
+				"linux"		"265"
+				"mac"		"265"
+			}
+			"Weapon_Equip"
+			{
+				"windows" 	"262"
+				"linux"		"263"
+				"mac"		"263"
+			}
+			"Weapon_Switch"
+			{
+				"windows" 	"265"
+				"linux"		"266"
+				"mac"		"266"
+			}
+		}
+	}
+}
