@@ -31,8 +31,6 @@ Handle hGameConf;
 
 // Offsets
 Handle hForceRespawn;
-Handle hOffCalcIsAttackCriticalHelper;
-Handle hOffCalcIsAttackCriticalHelperNoCrits;
 
 // Signatures
 Handle hBurn;
@@ -41,19 +39,53 @@ Handle hDisguise;
 Handle hRegenerate;
 Handle hAddCondition;
 Handle hRemoveCondition;
-Handle hCanPlayerTeleport;
-Handle hSetInWaitingForPlayers;
-Handle hSigCalcIsAttackCriticalHelper;
-Handle hSigCalcIsAttackCriticalHelperNoCrits;
  
 public void OnPluginStart()
 {
 	hGameConf = LoadGameConfigFile("tf2classic.games");
 	
+	// Burn
+	StartPrepSDKCall(SDKCall_Player);
+	PrepSDKCall_SetFromConf(hGameConf, SDKConf_Virtual, "Burn");
+	PrepSDKCall_AddParameter(SDKType_CBasePlayer, SDKPass_Pointer);
+	hBurn = EndPrepSDKCall();
+	
 	// ForceRespawn
 	StartPrepSDKCall(SDKCall_Player);
 	PrepSDKCall_SetFromConf(hGameConf, SDKConf_Virtual, "ForceRespawn");
 	hForceRespawn = EndPrepSDKCall();
+	
+	// Regenerate
+	StartPrepSDKCall(SDKCall_Player);
+	PrepSDKCall_SetFromConf(hGameConf, SDKConf_Signature, "Regenerate");
+	hRegenerate = EndPrepSDKCall();
+	
+	// AddCondition
+	StartPrepSDKCall(SDKCall_Player);
+	PrepSDKCall_SetFromConf(hGameConf, SDKConf_Signature, "AddCondition");
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+	PrepSDKCall_AddParameter(SDKType_Float, SDKPass_Plain);
+	PrepSDKCall_AddParameter(SDKType_CBasePlayer, SDKPass_Pointer, VDECODE_FLAG_ALLOWNULL);
+	hAddCondition = EndPrepSDKCall();
+	
+	// RemoveCondition
+	StartPrepSDKCall(SDKCall_Player);
+	PrepSDKCall_SetFromConf(hGameConf, SDKConf_Signature, "RemoveCondition");
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+	hRemoveCondition = EndPrepSDKCall();
+	
+	// Disguise
+	StartPrepSDKCall(SDKCall_Player);
+	PrepSDKCall_SetFromConf(hGameConf, SDKConf_Signature, "Disguise");
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer, VDECODE_FLAG_ALLOWNULL);
+	hDisguise = EndPrepSDKCall();
+	
+	// RemoveDisguise
+	StartPrepSDKCall(SDKCall_Player);
+	PrepSDKCall_SetFromConf(hGameConf, SDKConf_Signature, "RemoveDisguise");
+	hRemoveDisguise = EndPrepSDKCall();
 	
 	delete hGameConf;
 	
@@ -65,14 +97,64 @@ public void OnPluginStart()
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
+	CreateNative("TF2_IgnitePlayer", Native_IgnitePlayer);
 	CreateNative("TF2_RespawnPlayer", Native_RespawnPlayer);
+	CreateNative("TF2_RegeneratePlayer", Native_RegeneratePlayer);
+	CreateNative("TF2_AddCondition", Native_AddCondition);
+	CreateNative("TF2_RemoveCondition", Native_RemoveCondition);
+	CreateNative("TF2_DisguisePlayer", Native_DisguisePlayer);
+	CreateNative("TF2_RemovePlayerDisguise", Native_RemovePlayerDisguise);
 	return APLRes_Success;
+}
+ 
+public int Native_IgnitePlayer(Handle plugin, int numParams)
+{
+	int client = GetNativeCell(1);
+	int attacker = GetNativeCell(2);
+	SDKCall(hBurn, client, attacker);
 }
  
 public int Native_RespawnPlayer(Handle plugin, int numParams)
 {
 	int client = GetNativeCell(1);
 	SDKCall(hForceRespawn, client);
+}
+
+public int Native_RegeneratePlayer(Handle plugin, int numParams)
+{
+	int client = GetNativeCell(1);
+	SDKCall(hRegenerate, client);
+}
+ 
+public int Native_AddCondition(Handle plugin, int numParams)
+{
+	int client = GetNativeCell(1);
+	int condition = GetNativeCell(2);
+	float duration = GetNativeCell(3);
+	int inflictor = GetNativeCell(4);
+	SDKCall(hAddCondition, client, condition, duration, inflictor);
+}
+ 
+public int Native_RemoveCondition(Handle plugin, int numParams)
+{
+	int client = GetNativeCell(1);
+	int condition = GetNativeCell(2);
+	SDKCall(hRemoveCondition, client, condition);
+}
+ 
+public int Native_DisguisePlayer(Handle plugin, int numParams)
+{
+	int client = GetNativeCell(1);
+	int team = GetNativeCell(2);
+	int classType = GetNativeCell(3);
+	int target = GetNativeCell(4);
+	SDKCall(hDisguise, client, team, classType, target);
+}
+ 
+public int Native_RemovePlayerDisguise(Handle plugin, int numParams)
+{
+	int client = GetNativeCell(1);
+	SDKCall(hRemoveDisguise, client);
 }
 
 public bool Filter_Red(const char[] pattern, Handle clients)
