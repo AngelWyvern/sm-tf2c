@@ -54,11 +54,4 @@
 			"game"					"tf2classic"
 		}
 	}
-	"tf2classic"
-	{
-		"Keys"
-		{
-			"GameExtension"		"game.tf2classic"
-		}
-	}
 }

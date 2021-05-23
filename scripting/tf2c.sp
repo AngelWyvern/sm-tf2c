@@ -26,8 +26,25 @@ enum TFTeam
 	TFTeam_Yellow     = 5
 };
 
+// Game Config
 Handle hGameConf;
-Handle hRespawn;
+
+// Offsets
+Handle hForceRespawn;
+Handle hOffCalcIsAttackCriticalHelper;
+Handle hOffCalcIsAttackCriticalHelperNoCrits;
+
+// Signatures
+Handle hBurn;
+Handle hRemoveDisguise;
+Handle hDisguise;
+Handle hRegenerate;
+Handle hAddCondition;
+Handle hRemoveCondition;
+Handle hCanPlayerTeleport;
+Handle hSetInWaitingForPlayers;
+Handle hSigCalcIsAttackCriticalHelper;
+Handle hSigCalcIsAttackCriticalHelperNoCrits;
  
 public void OnPluginStart()
 {
@@ -36,7 +53,7 @@ public void OnPluginStart()
 	// ForceRespawn
 	StartPrepSDKCall(SDKCall_Player);
 	PrepSDKCall_SetFromConf(hGameConf, SDKConf_Virtual, "ForceRespawn");
-	hRespawn = EndPrepSDKCall();
+	hForceRespawn = EndPrepSDKCall();
 	
 	delete hGameConf;
 	
@@ -55,7 +72,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 public int Native_RespawnPlayer(Handle plugin, int numParams)
 {
 	int client = GetNativeCell(1);
-	SDKCall(hRespawn, client);
+	SDKCall(hForceRespawn, client);
 }
 
 public bool Filter_Red(const char[] pattern, Handle clients)

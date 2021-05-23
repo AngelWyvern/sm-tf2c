@@ -78,6 +78,8 @@ enum TFCond
 	TFCond_KnockedIntoAir = 115, //115: Used when a player is airblasted
 };
 
+const float TFCondDuration_Infinite = -1.0;
+
 enum TFObjectType
 {
 	TFObject_CartDispenser = 0,
@@ -101,6 +103,143 @@ enum TFObjectMode
  * @error               Invalid client index, client not in game, or no mod support.
  */
 native void TF2_RespawnPlayer(int client);
+
+/**
+ * Regenerates a client's health and ammunition
+ *
+ * @param client        Player's index.
+ * @error               Invalid client index, client not in game, or no mod support.
+ */
+native void TF2_RegeneratePlayer(int client);
+
+/**
+ * Adds a condition to a player
+ *
+ * @param client        Player's index.
+ * @param condition     Integer identifier of condition to apply.
+ * @param duration      Duration of condition (does not apply to all conditions).
+ *                      Pass TFCondDuration_Infinite to apply until manually removed.
+ * @param inflictor     Condition inflictor's index (0 for no inflictor).
+ * @error               Invalid client index, client not in game, or no mod support.
+ */
+native void TF2_AddCondition(int client, TFCond condition, float duration=TFCondDuration_Infinite, int inflictor=0);
+
+/**
+ * Removes a condition from a player
+ *
+ * @param client        Player's index.
+ * @param condition     Integer identifier of condition to remove.
+ * @error               Invalid client index, client not in game, or no mod support.
+ */
+native void TF2_RemoveCondition(int client, TFCond condition);
+
+/**
+ * Disguises a client to the given model and team. Only has an effect on spies.
+ *
+ * Note: This only starts the disguise process and a delay occurs before the spy is fully disguised
+ *
+ * @param client        Player's index.
+ * @param team          Team to disguise the player as (only TFTeam_Red and TFTeam_Blue have an effect)
+ * @param classType     TFClassType class to disguise the player as
+ * @param target        Specific target player to disguise as (0 for any)
+ * @error               Invalid client index, client not in game, or no mod support.
+ */
+native void TF2_DisguisePlayer(int client, TFTeam team, TFClassType classType, int target=0);
+
+/**
+ * Removes the current disguise from a client. Only has an effect on spies.
+ *
+ * @param client        Player's index.
+ * @error               Invalid client index, client not in game, or no mod support.
+ */
+native void TF2_RemovePlayerDisguise(int client);
+
+/**
+ * Called on weapon fire to decide if the current shot should be critical.
+ * Return Plugin_Continue to let the original calculation or return a higher
+ * action to override the decision with the value of 'result'
+ *
+ * @note Since critical shots are also calculated client side any changes made with
+ *       this will not show for the shooter. Projectile weapons such as the rocketlauncher
+ *       and demoman weapons will show a critical bullet but no critical sound effect.
+ *       Bullet hits should appear as expected.
+ *
+ * @param client        Client Index.
+ * @param weapon        Weapon entity Index.
+ * @param weaponname    Classname of the weapon.
+ * @param result        Buffer param for the result of the decision.
+ */
+forward Action TF2_CalcIsAttackCritical(int client, int weapon, char[] weaponname, bool &result);
+
+/**
+ * Called after a condition is added to a player
+ *
+ * @param client        Index of the client to which the condition is being added.
+ * @param condition     Condition that is being added.
+ */
+forward void TF2_OnConditionAdded(int client, TFCond condition);
+
+/**
+ * Called after a condition is removed from a player
+ *
+ * @param client        Index of the client to which the condition is being removed.
+ * @param condition     Condition that is being removed.
+ */
+forward void TF2_OnConditionRemoved(int client, TFCond condition);
+
+/**
+ * Called when the server enters the Waiting for Players round state
+ */
+forward void TF2_OnWaitingForPlayersStart();
+
+/**
+ * Called when the server exits the Waiting for Players round state
+ */
+forward void TF2_OnWaitingForPlayersEnd();
+
+/**
+ * Called when a player attempts to use a teleporter to decide if the player should be allowed to teleport.
+ * Return Plugin_Continue to let the original calculation or return a higher
+ * action to override the decision with the value of 'result'
+ *
+ * @param client        Client index.
+ * @param teleporter    Teleporter entity index.
+ * @param result        Buffer param for the result of the decision.
+ *                      This is prepopulated with the game's original decision to let a player teleport.
+ * @return              Plugin_Continue for original calculation, higher value to use 'result'.
+ */
+forward Action TF2_OnPlayerTeleport(int client, int teleporter, bool &result);
+
+/**
+ * Finds the TFClassType for a given class name.
+ *
+ * @param classname     A classname string such as "sniper" or "demoman"
+ * @return              A TFClassType constant.
+ */
+stock TFClassType TF2_GetClass(const char[] classname)
+{
+	if (StrEqual(classname, "scout"))
+		return TFClass_Scout;
+	if (StrEqual(classname, "soldier"))
+		return TFClass_Soldier;
+	if (StrEqual(classname, "pyro"))
+		return TFClass_Pyro;
+	if (StrEqual(classname, "demoman"))
+		return TFClass_DemoMan;
+	if (StrEqual(classname, "heavyweapons"))
+		return TFClass_Heavy;
+	if (StrEqual(classname, "engineer"))
+		return TFClass_Engineer;
+	if (StrEqual(classname, "medic"))
+		return TFClass_Medic;
+	if (StrEqual(classname, "sniper"))
+		return TFClass_Sniper;
+	if (StrEqual(classname, "spy"))
+		return TFClass_Spy;
+	if (StrEqual(classname, "civilian"))
+		return TFClass_Civilian;
+	return TFClass_Unknown;
+}
 
 /**
  * Gets a client's current class.
