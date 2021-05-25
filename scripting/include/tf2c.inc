@@ -251,6 +251,30 @@ stock TFClassType TF2_GetClass(const char[] classname)
 }
 
 /**
+ * Gets a client's current team.
+ *
+ * @param client        Client index.
+ * @return              Current TFTeam of client.
+ * @error               Invalid client index.
+ */
+stock TFTeam TF2_GetClientTeam(int client)
+{
+	return view_as<TFTeam>(GetClientTeam(client));
+}
+
+/**
+ * Changes a client's current team.
+ *
+ * @param client        Client index.
+ * @param team          TFTeam team symbol.
+ * @error               Invalid client index.
+ */
+stock void TF2_ChangeClientTeam(int client, TFTeam team)
+{
+	ChangeClientTeam(client, view_as<int>(team));
+}
+
+/**
  * Gets a client's current class.
  *
  * @param client        Player's index.
@@ -263,13 +287,257 @@ stock TFClassType TF2_GetPlayerClass(int client)
 }
 
 /**
- * Gets a client's current team.
+ * Sets a client's class.
  *
- * @param client        Client index.
- * @return              Current TFTeam of client.
+ * Note: If setting player class in a player spawn hook weapons should be set to false.
+ *
+ * @param client        Player's index.
+ * @param classType     TFClassType class symbol.
+ * @param weapons       This parameter is ignored.
+ * @param persistent    If true, changes the player's desired class so the change stays after death.
  * @error               Invalid client index.
  */
-stock TFTeam TF2_GetClientTeam(int client)
+stock void TF2_SetPlayerClass(int client, TFClassType classType, bool weapons=true, bool persistent=true)
 {
-	return view_as<TFTeam>(GetClientTeam(client));
+	SetEntProp(client, Prop_Send, "m_iClass", view_as<int>(classType));
+
+	if (persistent)
+	{
+		SetEntProp(client, Prop_Send, "m_iDesiredPlayerClass", view_as<int>(classType));
+	}
+}
+
+/**
+ * Retrieves client data from the resource entity
+ *
+ * @param client		Player's index.
+ * @param type			ResourceType constant
+ * @return				Value or -1 on failure.
+ * @error				Invalid client index, client not in game or failed to find resource entity.
+ * @deprecated          Use GetPlayerResourceEntity and GetEntProp instead.
+ */
+#pragma deprecated Use GetPlayerResourceEntity and GetEntProp instead
+stock int TF2_GetPlayerResourceData(int client, TFResourceType type)
+{
+	if (!IsClientConnected(client))
+	{
+		return -1;
+	}
+
+	int offset = FindSendPropInfo("CTFPlayerResource", TFResourceNames[type]);
+
+	if (offset < 1)
+	{
+		return -1;
+	}
+
+	int entity = TF2_GetResourceEntity();
+
+	if (entity == -1)
+	{
+		return -1;
+	}
+
+	return GetEntData(entity, offset + (client*4));
+}
+
+/**
+ * Sets client data in the resource entity
+ *
+ * Note: The game overwrites these values every frame, so changing them will have very little effect.
+ *
+ * @param client        Player's index.
+ * @param type          ResourceType constant
+ * @param value         Value to set.
+ * @return              Value or -1 on failure.
+ * @error               Invalid client index, client not in game or failed to find resource entity.
+ * @deprecated          Use GetPlayerResourceEntity and SetEntProp instead.
+ */
+#pragma deprecated Use GetPlayerResourceEntity and SetEntProp instead
+stock bool TF2_SetPlayerResourceData(int client, TFResourceType type, any value)
+{
+	if (!IsClientConnected(client))
+	{
+		return false;
+	}
+
+	int offset = FindSendPropInfo("CTFPlayerResource", TFResourceNames[type]);
+
+	if (offset < 1)
+	{
+		return false;
+	}
+
+	int entity = TF2_GetResourceEntity();
+
+	if (entity == -1)
+	{
+		return false;
+	}
+
+	SetEntData(entity, offset + (client*4), value);
+
+	return true;
+}
+
+/**
+ * Removes all weapons from a client's weapon slot
+ *
+ * @param client        Player's index.
+ * @param slot          Slot index (0-5)
+ * @error               Invalid client, invalid slot or lack of mod support
+ */
+stock void TF2_RemoveWeaponSlot(int client, int slot)
+{
+	int weaponIndex;
+	while ((weaponIndex = GetPlayerWeaponSlot(client, slot)) != -1)
+	{
+		// bug #6206
+		// papering over a valve bug where a weapon's extra wearables aren't properly removed from the weapon's owner
+		int extraWearable = GetEntPropEnt(weaponIndex, Prop_Send, "m_hExtraWearable");
+		if (extraWearable != -1)
+		{
+			TF2_RemoveWearable(client, extraWearable);
+		}
+
+		extraWearable = GetEntPropEnt(weaponIndex, Prop_Send, "m_hExtraWearableViewModel");
+		if (extraWearable != -1)
+		{
+			TF2_RemoveWearable(client, extraWearable);
+		}
+
+		RemovePlayerItem(client, weaponIndex);
+		AcceptEntityInput(weaponIndex, "Kill");
+	}
+}
+
+/**
+ * Removes all weapons from a client
+ *
+ * @param client        Player's index.
+ */
+stock void TF2_RemoveAllWeapons(int client)
+{
+	for (int i = 0; i <= 5; i++)
+	{
+		TF2_RemoveWeaponSlot(client, i);
+	}
+}
+
+/**
+ * Gets a player's condition bits
+ *
+ * @param client        Player's index.
+ * @return              Player's condition bits
+ * @deprecated          Use TF2_IsPlayerInCondition instead.
+ */
+#pragma deprecated Use TF2_IsPlayerInCondition instead.
+stock int TF2_GetPlayerConditionFlags(int client)
+{
+	return GetEntProp(client, Prop_Send, "m_nPlayerCond")|GetEntProp(client, Prop_Send, "_condition_bits");
+}
+
+/**
+ * Check whether or not a condition is set on a player
+ *
+ * @param client        Player's index.
+ * @param cond          TFCond constant
+ * @return              True if set, false otherwise
+ */
+stock bool TF2_IsPlayerInCondition(int client, TFCond cond)
+{
+	// Conditions are stored across multiple netprops now, one for each 32-bit segment.
+	int iCond = view_as<int>(cond);
+	switch (iCond / 32)
+	{
+		case 0:
+		{
+			int bit = 1 << iCond;
+			if ((GetEntProp(client, Prop_Send, "m_nPlayerCond") & bit) == bit)
+			{
+				return true;
+			}
+
+			if ((GetEntProp(client, Prop_Send, "_condition_bits") & bit) == bit)
+			{
+				return true;
+			}
+		}
+		case 1:
+		{
+			int bit = (1 << (iCond - 32));
+			if ((GetEntProp(client, Prop_Send, "m_nPlayerCondEx") & bit) == bit)
+			{
+				return true;
+			}
+		}
+		case 2:
+		{
+			int bit = (1 << (iCond - 64));
+			if ((GetEntProp(client, Prop_Send, "m_nPlayerCondEx2") & bit) == bit)
+			{
+				return true;
+			}
+		}
+		case 3:
+		{
+			int bit = (1 << (iCond - 96));
+			if ((GetEntProp(client, Prop_Send, "m_nPlayerCondEx3") & bit) == bit)
+			{
+				return true;
+			}
+		}
+		case 4:
+		{
+			int bit = (1 << (iCond - 128));
+			if ((GetEntProp(client, Prop_Send, "m_nPlayerCondEx4") & bit) == bit)
+			{
+				return true;
+			}
+		}
+		default:
+		{
+			ThrowError("Invalid TFCond value %d", iCond);
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Gets an entity's object type.
+ *
+ * @param entity        Entity index.
+ * @return              Current TFObjectType of entity.
+ * @error               Invalid entity index.
+ */
+stock TFObjectType TF2_GetObjectType(int entity)
+{
+	int offset = GetEntSendPropOffs(entity, "m_iObjectType");
+
+	if (offset <= 0)
+	{
+		ThrowError("Entity index %d is not an object", entity);
+	}
+
+	return view_as<TFObjectType>(GetEntData(entity, offset));
+}
+
+/**
+ * Gets an entity's object mode.
+ *
+ * @param entity        Entity index.
+ * @return              Current TFObjectMode of entity.
+ * @error               Invalid entity index.
+ */
+stock TFObjectMode TF2_GetObjectMode(int entity)
+{
+	int offset = GetEntSendPropOffs(entity, "m_iObjectMode");
+
+	if (offset <= 0)
+	{
+		ThrowError("Entity index %d is not an object", entity);
+	}
+
+	return view_as<TFObjectMode>(GetEntData(entity, offset));
 }
