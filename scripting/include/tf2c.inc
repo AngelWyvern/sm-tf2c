@@ -96,6 +96,28 @@ enum TFObjectMode
 	TFObjectMode_Exit     = 1
 };
 
+enum TFResourceType
+{
+	TFResource_Ping,
+	TFResource_Score,
+	TFResource_Deaths,
+	TFResource_TotalScore,
+	TFResource_Captures,
+	TFResource_Defenses,
+	TFResource_Dominations,
+	TFResource_Revenge,
+	TFResource_BuildingsDestroyed,
+	TFResource_Headshots,
+	TFResource_Backstabs,
+	TFResource_HealPoints,
+	TFResource_Invulns,
+	TFResource_Teleports,
+	TFResource_ResupplyPoints,
+	TFResource_KillAssists,
+	TFResource_MaxHealth,
+	TFResource_PlayerClass
+};
+
 /**
  * Sets a client on fire for 10 seconds.
  *
